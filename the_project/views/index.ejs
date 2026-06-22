@@ -8,6 +8,25 @@
         <main>
             <h1>ToDo App</h1>
             <img src="image.jpg" alt="landscape image"/>
+            <form>
+                <input type="text" name="newTodo" autocomplete="off" placeholder="Add a new ToDo">
+                <button type="submit" name="submit">Send</button>
+            </form>
+            <h2>Todos</h2>
+            <% if (todos.lenght===0) {%>
+                <p>No Todos Added Yet</p>
+
+            <%} else {%>
+                <ul>
+                    <% for (let i =0; i < todos.length; i++) {%>
+                    <li key="<%=i%>">
+                        <%= todos[i] %>
+                    </li>
+
+                <%} %>  
+                </ul>
+                        
+            <%}%>
 
         </main>
         <footer>

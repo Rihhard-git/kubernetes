@@ -14,7 +14,11 @@ const directory = path.join(__dirname, 'files')
 const imagePath = path.join(directory, 'image.jpg')
 const logPath = path.join(directory, 'log.txt')
 
-
+const todos = [
+    "Finish DevOps with Kubernetes 2026",
+    "FullStack Open 2026",
+    "BIG PROJECT"
+]
 
 const fileExists = async (filePath) => new Promise(res => {
 
@@ -67,7 +71,7 @@ app.set('view engine', 'ejs')
 app.get('/', async (req, res) => {
 
 
-    res.render('index')
+    res.render('index', { todos: todos})
     if (await calculateTimeDifference() > 10) {
         console.log('removing old img')
         removeFile()
