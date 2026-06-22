@@ -14,7 +14,8 @@ spec:
     spec:
       volumes:
         - name: shared-file
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: logoutput-claim
       containers:
         - name: file-writer
           image: raihhardv/file-writer

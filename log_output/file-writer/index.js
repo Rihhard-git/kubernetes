@@ -12,7 +12,8 @@ const PORT = process.env.PORT || 3001
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const logFilePath = path.join(__dirname, 'files', 'logs.txt')
+const directory = path.join(__dirname, 'files')
+const logFilePath = path.join(directory, 'logs.txt')
 
 const createDirIfNotExists = async (dir) => {
     await fs.access(dir)
@@ -23,12 +24,12 @@ const createDirIfNotExists = async (dir) => {
 
 const generateRandomString = async () => {
 
-    createDirIfNotExists(__dirname)
+    await createDirIfNotExists(directory)
     let currentString = ''
     const randomString = crypto.randomUUID()
     currentString = new Date + " : " + randomString
  
-    await fs.appendFile(logFilePath, `${currentString}\r\n`, 'utf8')
+    await fs.writeFile(logFilePath, `${currentString}\r\n`, 'utf8')
         .then(console.log('Log entry added: ', currentString))
         .catch(err => console.log('Error occured adding log entry: ', err))
  
