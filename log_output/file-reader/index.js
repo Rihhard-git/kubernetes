@@ -1,6 +1,7 @@
 import express from 'express'
 import fs from 'fs/promises'
 import path from 'path'
+import axios from 'axios'
 import { fileURLToPath } from 'url'
 
 const app = express()
@@ -21,17 +22,23 @@ app.get('/', async (req, res) => {
         })
         .catch((err) => console.log('Error occured reading random string data: ', err))
 
-    const pingpongCount = await fs.readFile(countFilePath, 'utf8')
-        .then((data) => {
-            console.log('count data found: ', data)
-            return data
-        })
-        .catch((err) => console.log('Error occured reading count data: ', err))
+    console.log('trying to find count via network')
+
+    const response = await axios.get('http://pingpong-svc:2345/pings')
+
+    console.log('count found: ', response.data)
+    
+    // const pingpongCount = await fs.readFile(countFilePath, 'utf8')
+    //     .then((data) => {
+    //         console.log('count data found: ', data)
+    //         return data
+    //     })
+    //     .catch((err) => console.log('Error occured reading count data: ', err))
 
     res.send(`
         <div>
             <p>${randomString}</p>
-            <p>Ping / Pongs: ${pingpongCount}</p>
+            <p>Ping / Pongs: ${response.data}</p>
         </div>
         `     
     )
