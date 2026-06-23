@@ -1,4 +1,5 @@
 import express from 'express'
+import bodyParser from 'body-parser'
 import fsp from 'fs/promises'
 import fs from 'fs'
 import path from 'path'
@@ -14,11 +15,6 @@ const directory = path.join(__dirname, 'files')
 const imagePath = path.join(directory, 'image.jpg')
 const logPath = path.join(directory, 'log.txt')
 
-const todos = [
-    "Finish DevOps with Kubernetes 2026",
-    "FullStack Open 2026",
-    "BIG PROJECT"
-]
 
 const fileExists = async (filePath) => new Promise(res => {
 
@@ -46,6 +42,7 @@ const findFile = async () => {
 
 }
 
+
 const calculateTimeDifference = async () => {
 
     if (!await fileExists(logPath)) return
@@ -64,27 +61,46 @@ const calculateTimeDifference = async () => {
 const removeFile = async () => new Promise(res => fs.unlink(imagePath, (err) => res()))
 
 
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use( express.static('files' ))
 
 app.set('view engine', 'ejs')
 
+
+
 app.get('/', async (req, res) => {
 
+    await findFile()
 
-    res.render('index', { todos: todos})
-    if (await calculateTimeDifference() > 10) {
+    const response = await axios.get('http://todo-backend-svc:2345/todos')
+
+    console.log('todos found: ', response.data)
+    res.render('index', { todos: response.data})
+    if (calculateTimeDifference() > 10) {
         console.log('removing old img')
-        removeFile()
+        await removeFile()
         console.log('remove id one, finding new image')
-        findFile()
+        await findFile()
         console.log('new image found and saved')
     }  
 
 })
 
-findFile()
+app.post('/', async (req, res) => {
+    console.log(req.body)
+    const taskTitle = req.body.newtodo
+    if (taskTitle) {
+        const task = {
+            title: taskTitle
+        }
+        await axios.post('http://todo-backend-svc:2345/todos', task).then(() => { res.redirect('/')})
+    } else {
+        res.redirect('/')
+    }
+})
 
 app.listen(PORT, () => {
+
     console.log(`Server started in port ${PORT}`)
     
 })
