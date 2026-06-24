@@ -1,5 +1,0 @@
-{
-    "scripts": {
-        "pushGit": "git add . && git commit -m $M"
-    }
-}
