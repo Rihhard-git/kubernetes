@@ -17,6 +17,12 @@ spec:
         - name: shared-file
           persistentVolumeClaim:
             claimName: logoutput-claim
+        - name: information
+          configMap:
+            name: logoutput-configmap
+            items:
+            - key: "information"
+              path: "information.txt"
       containers:
         - name: file-writer
           image: raihhardv/file-writer
@@ -25,6 +31,15 @@ spec:
             mountPath: /usr/src/app/files
         - name: file-reader
           image: raihhardv/file-reader
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: logoutput-configmap
+                  key: message
           volumeMounts:
           - name: shared-file
             mountPath: /usr/src/app/files
+          - name: information
+            mountPath: /usr/src/app/config
+            readOnly: true
