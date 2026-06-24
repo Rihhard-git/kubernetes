@@ -8,6 +8,7 @@ import axios from 'axios'
 
 const app = express()
 const PORT = process.env.PORT || 3000
+const BACKEND_URI = process.env.BACKEND_URI
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -72,7 +73,7 @@ app.get('/', async (req, res) => {
 
     await findFile()
 
-    const response = await axios.get('http://todo-backend-svc:2345/todos')
+    const response = await axios.get(BACKEND_URI)
 
     console.log('todos found: ', response.data)
     res.render('index', { todos: response.data})
@@ -93,7 +94,7 @@ app.post('/', async (req, res) => {
         const task = {
             title: taskTitle
         }
-        await axios.post('http://todo-backend-svc:2345/todos', task).then(() => { res.redirect('/')})
+        await axios.post(BACKEND_URI, task).then(() => { res.redirect('/')})
     } else {
         res.redirect('/')
     }
