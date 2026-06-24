@@ -24,3 +24,4 @@
 - [2.2](https://github.com/Rihhard-git/kubernetes/tree/2.2/the_project)
 - [2.3](https://github.com/Rihhard-git/kubernetes/tree/2.3/log_ouput)
 - [2.4](https://github.com/Rihhard-git/kubernetes/tree/2.4/the_project)
+- [2.5](https://github.com/Rihhard-git/kubernetes/tree/2.5/log_output)
