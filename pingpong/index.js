@@ -2,44 +2,67 @@ import express from 'express'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { Sequelize, Model, DataTypes } from 'sequelize'
 
 const app = express()
 const PORT = process.env.PORT || 3000
+const DATABASE_URL = process.env.DATABASE_URL
+const sequelize = new Sequelize(DATABASE_URL, {
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    }
+})
 
-// const __filename = fileURLToPath(import.meta.url)
-// const __dirname = path.dirname(__filename)
-// const directory = path.join(__dirname, 'files')
-// const countFilePath = path.join(directory, 'count.txt')
+class PingPong extends Model {}
+PingPong.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    count: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    }
+}, {
+    sequelize,
+    underscored: true,
+    timestamps: false,
+    modelName: 'pingpong'
+})
+await PingPong.sync()
 
-let count = 0
-
-// const createDirIfNotExists = async (dir) => {
-//     await fs.access(dir)
-//         .then(() => console.log('access ok') )
-//         .catch(() => {
-//             fs.mkdir(dir)})
+// const connectToDatabase = async () => {
+//   try {
+//     await sequelize.authenticate()
+//     console.log('connected to the database')
+//   } catch (err) {
+//     console.log('failed to connect to the database')
+//     console.log(err)
+//     return process.exit(1)
+//   }
 // }
-// console.log('creating directory and file')
-// await createDirIfNotExists(directory)
 
-// fs.writeFile(countFilePath, count.toString(), 'utf8')
-//         .then(() => undefined)
-//         .catch(err => console.log('Error writing to file: ', err))
+const pingpong = await PingPong.findByPk(1) || PingPong.build({count: 0})
 
-// console.log('directory and file created')
+console.log('count is :', pingpong.count)
 
 app.use('/pingpong', async (req, res) => {
 
-//    console.log(directory)
+    console.log('pingpong-ing')
+    console.log('count is now: ', pingpong.count)
 
-    count++;
+    pingpong.count = pingpong.count++
 
-    // fs.writeFile(countFilePath, count.toString(), 'utf8')
-    //     .then(() => undefined)
-    //     .catch(err => console.log('Error writing to file: ', err))
+    console.log('added 1 to pingpong count, now count is: ', pingpong.count)
+    await pingpong.save()
 
-    res.send(`pong ${count}`)
+    console.log('pingpong count saved.')
     
+    res.send(`pong ${pingpong.count}`)  
 })
 
 app.use('/pings', (req, res) => {
@@ -47,6 +70,12 @@ app.use('/pings', (req, res) => {
     res.send(count)
 })
 
+// const start = async () => {
+//     await connectToDatabase()
+    
+// }
 app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`)
-})
+        console.log(`Server running on port ${PORT}`)
+    })
+
+// start()
