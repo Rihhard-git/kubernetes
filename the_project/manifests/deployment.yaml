@@ -22,11 +22,20 @@ spec:
           image: raihhardv/todo-app
           env:
             - name: BACKEND_URI
-              value: 'http://todo-backend-svc:2345/todos'
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: BACKEND_URI
             - name: PORT
-              value: '3000'
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: PORT
             - name: IMAGE_URI
-              value: 'https://loremflickr.com/600/400/landscape'      
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: IMAGE_URI   
           volumeMounts:
           - name: shared-file
             mountPath: /usr/src/app/files

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+spec:
+  serviceName: database-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - name: database
+              containerPort: 5432
+          volumeMounts:
+            - name: database-storage
+              mountPath: /data
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: POSTGRES_PASSWORD
+  volumeClaimTemplates:
+    - metadata:
+        name: database-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 100Mi
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-svc
+  labels:
+    app: database
+spec:
+  ports:
+    - port: 5432
+      name: database
+  selector:
+    app: database
+  clusterIP: None

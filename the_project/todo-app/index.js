@@ -46,6 +46,8 @@ const findFile = async () => {
 
 const calculateTimeDifference = async () => {
 
+    console.log('calculating time difference...')
+
     if (!await fileExists(logPath)) return
 
     const lastTimeStamp = await fsp.readFile(logPath, 'utf8')
@@ -77,7 +79,9 @@ app.get('/', async (req, res) => {
 
     console.log('todos found: ', response.data)
     res.render('index', { todos: response.data})
-    if (calculateTimeDifference() > 10) {
+
+    console.log('checking if image is older than 10min')
+    if (await calculateTimeDifference() > 10) {
         console.log('removing old img')
         await removeFile()
         console.log('remove id one, finding new image')
@@ -89,12 +93,12 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
     console.log(req.body)
-    const taskTitle = req.body.newtodo
-    if (taskTitle) {
-        const task = {
-            title: taskTitle
+    const todoTitle = req.body.newtodo
+    if (todoTitle) {
+        const todo = {
+            title: todoTitle
         }
-        await axios.post(BACKEND_URI, task).then(() => { res.redirect('/')})
+        await axios.post(BACKEND_URI, todo).then(() => { res.redirect('/')})
     } else {
         res.redirect('/')
     }

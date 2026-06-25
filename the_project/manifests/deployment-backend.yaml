@@ -16,3 +16,14 @@ spec:
       containers:
         - name: todo-backend
           image: raihhardv/todo-backend
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: DATABASE_URL
+            - name: PORT
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: PORT

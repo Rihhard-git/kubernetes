@@ -1,7 +1,38 @@
 import express from 'express'
+import { Sequelize, Model, DataTypes } from 'sequelize'
 
 const app = express()
 const PORT = process.env.PORT
+
+const DATABASE_URL = process.env.DATABASE_URL
+const sequelize = new Sequelize(DATABASE_URL, {
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false
+        }
+    }
+})
+
+class Todo extends Model {}
+Todo.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    title: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    }
+}, {
+    sequelize,
+    underscored: true,
+    timestamps: false,
+    modelName: 'todo'
+})
+
+await Todo.sync()
 
 app.use(express.json())
 
@@ -17,15 +48,13 @@ let todos = [
     }
 ]
 
-app.get('/todos', (req,res) => res.send(todos))
+app.get('/todos', async (req,res) => {
+    const todos = await Todo.findAll()
+    res.json(todos)
+})
 
-app.post('/todos', (req, res) => {
-    console.log(req)
-    const todo = req.body
-    console.log(todo)
-    if (todo) {
-        todos.push(todo)
-    }
+app.post('/todos', async (req, res) => {
+    const todo = await Todo.create(req.body)
     res.status(201).json(todo)
 })
 
