@@ -36,17 +36,6 @@ await Todo.sync()
 
 app.use(express.json())
 
-let todos = [
-    {
-        title: "Finish DevOps with Kubernetes 2026"
-    },
-    {
-        title: "FullStack Open 2026"
-    },
-    {
-        title: "FullStack Project"
-    }
-]
 
 app.get('/todos', async (req,res) => {
     const todos = await Todo.findAll()
