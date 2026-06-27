@@ -98,7 +98,12 @@ app.post('/', async (req, res) => {
         const todo = {
             title: todoTitle
         }
-        await axios.post(BACKEND_URI, todo).then(() => { res.redirect('/')})
+        try {
+            await axios.post(BACKEND_URI, todo).then(() => { res.redirect('/')})
+        } catch (error) {
+            console.log('Something went wrong: ', error)
+        }
+        
     } else {
         res.redirect('/')
     }

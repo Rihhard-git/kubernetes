@@ -1,5 +1,6 @@
 import express from 'express'
 import { Sequelize, Model, DataTypes } from 'sequelize'
+import morgan from 'morgan'
 
 const app = express()
 const PORT = process.env.PORT
@@ -13,7 +14,6 @@ const sequelize = new Sequelize(DATABASE_URL, {
         }
     }
 })
-
 class Todo extends Model {}
 Todo.init({
     id: {
@@ -23,7 +23,11 @@ Todo.init({
     },
     title: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            len: [0, 140]
+        }
+
     }
 }, {
     sequelize,
@@ -31,21 +35,56 @@ Todo.init({
     timestamps: false,
     modelName: 'todo'
 })
-
 await Todo.sync()
 
+const errorHandler = (error, req, res, next) => {
+
+    console.log(error)
+    if (error.name === 'SequelizeUniqueConstraintError') {
+        return res.status(400).send({ error: error.message })
+    }
+    if (error.name === 'SequelizeDatabaseError') {
+        return res.status(400).send({ error: error.message })
+    }
+    if (error.name === 'TypeError') {
+        return res.status(400).send({ error: error.message})
+    }
+    if (error.name === 'SequelizeValidationError') {
+        return res.status(400).send({ error: error.message})
+    }
+    next(error)
+}
+
 app.use(express.json())
+morgan.token('data', (req, res) => {
+
+    return JSON.stringify(req.body);
+})
+
+app.use(morgan('[:date[iso]] -- :method :url -- DATA: :data -- STATUS: :status' ))
 
 
-app.get('/todos', async (req,res) => {
+app.get('/todos', async (req,res,) => {
+
+    
     const todos = await Todo.findAll()
-    res.json(todos)
+    res.json(todos) 
+
+    
 })
 
-app.post('/todos', async (req, res) => {
-    const todo = await Todo.create(req.body)
-    res.status(201).json(todo)
+app.post('/todos', async (req, res, next) => {
+
+    try {
+        const todo = await Todo.create(req.body)
+        res.status(201).json(todo)
+    } catch (error) {
+        next(error)
+    }
+    
 })
+
+app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
