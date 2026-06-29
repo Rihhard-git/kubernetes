@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: logoutput-claim
 spec:
-  storageClassName: my-example-pv
   accessModes:
     - ReadWriteOnce
   resources:

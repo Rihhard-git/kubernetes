@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: exercises
   name: log-output-dep
 spec:
   replicas: 1
@@ -30,7 +29,7 @@ spec:
           - name: shared-file
             mountPath: /usr/src/app/files
         - name: file-reader
-          image: raihhardv/file-reader
+          image: raihhardv/file-reader@sha256:8512c682025dab655796fc76120a134715a10390de0b3c11adf91fbf4d284d4e
           env:
             - name: MESSAGE
               valueFrom:

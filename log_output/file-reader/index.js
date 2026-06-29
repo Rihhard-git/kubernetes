@@ -37,7 +37,7 @@ app.get('/', async (req, res) => {
 
     console.log('trying to find count via network')
 
-    const response = await axios.get('http://pingpong-svc:2345/pings')
+    const response = await axios.get('http://pingpong-svc:80/pings')
 
     console.log('count found: ', response.data)
     
