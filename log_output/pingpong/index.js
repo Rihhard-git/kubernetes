@@ -5,14 +5,12 @@ const PORT = 3000
 
 let pingpong = 0;
 
-app.get('/pingpong', (req, res) => {
-    console.log('doing some pingpong action')
-
+app.get('/', (req, res) => {
     pingpong++;
-    res.send(`pong ${pingpong}`)  
+    res.status(200).send(`pong ${pingpong}`)  
 
 })
-app.get('/', (req, res) => res.status(200).send('Health check ok!'))
+//app.get('/', (req, res) => res.status(200).send('Health check ok!'))
 
 app.get('/pings', (req, res) => {
 

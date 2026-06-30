@@ -15,4 +15,4 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: raihhardv/pingpong@sha256:953800601c9cc4391f2a906d4b9efa87e57f7d4587d7f378702d034482003f53
+          image: raihhardv/pingpong@sha256:14cb8adc6c9ec2d033586f812b95d18d5dc72955a99f7dc902ee16fc304f57b2
