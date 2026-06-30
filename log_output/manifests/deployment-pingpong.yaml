@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pingpong-dep
+  namespace: exercises
 spec:
   replicas: 1
   selector:
@@ -14,4 +15,4 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: raihhardv/pingpong@sha256:a80c379b04a4458991177c57f802fa0dfeb4ef3c396d409423bc9b892c0f806b
+          image: raihhardv/pingpong@sha256:953800601c9cc4391f2a906d4b9efa87e57f7d4587d7f378702d034482003f53
