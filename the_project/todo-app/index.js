@@ -69,11 +69,13 @@ app.use( express.static('files' ))
 
 app.set('view engine', 'ejs')
 
+app.get('/', (req, res) => res.status(200).send('Health check ok!'))
 
-
-app.get('/', async (req, res) => {
+app.get('/app', async (req, res) => {
 
     await findFile()
+
+    console.log(BACKEND_URI)
 
     const response = await axios.get(BACKEND_URI)
 
@@ -99,13 +101,13 @@ app.post('/', async (req, res) => {
             title: todoTitle
         }
         try {
-            await axios.post(BACKEND_URI, todo).then(() => { res.redirect('/')})
+            await axios.post(BACKEND_URI, todo).then(() => { res.redirect('/app')})
         } catch (error) {
             console.log('Something went wrong: ', error)
         }
         
     } else {
-        res.redirect('/')
+        res.redirect('/app')
     }
 })
 

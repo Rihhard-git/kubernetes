@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: raihhardv/todo-backend
+          image: raihhardv/todo-backend@sha256:bd2c6360393e443774a67fb8707fe701fcf163baae7fb1036ac485910f2b43f4
           env:
             - name: DATABASE_URL
               valueFrom:
@@ -27,3 +27,18 @@ spec:
                 secretKeyRef:
                   name: todoapp
                   key: PORT
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-backend-svc
+  namespace: project
+spec:
+  type: NodePort
+  selector: 
+    app: todo-backend
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 3000

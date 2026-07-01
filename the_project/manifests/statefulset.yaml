@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: database
+  namespace: project
 spec:
   serviceName: database-svc
   replicas: 1
@@ -20,23 +21,31 @@ spec:
             - name: database
               containerPort: 5432
           volumeMounts:
-            - name: database-storage
-              mountPath: /data
+            - name: database-volume
+              mountPath: /var/lib/postgresql
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: todoapp
                   key: POSTGRES_PASSWORD
-  volumeClaimTemplates:
-    - metadata:
-        name: database-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
-        resources:
-          requests:
-            storage: 100Mi
+      volumes:
+      - name: database-volume
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: project
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+
 ---
 
 apiVersion: v1

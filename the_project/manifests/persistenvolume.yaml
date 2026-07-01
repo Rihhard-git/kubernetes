@@ -3,9 +3,8 @@ kind: PersistentVolume
 metadata:
   name: todo-app-pv
 spec:
-  storageClassName: todo-app-pv
   capacity:
-    storage: 1Gi
+    storage: 100Mi
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce

@@ -63,7 +63,7 @@ morgan.token('data', (req, res) => {
 
 app.use(morgan('[:date[iso]] -- :method :url -- DATA: :data -- STATUS: :status' ))
 
-
+app.get('/', (req,res) => res.status(200).send('Health check ok!'))
 app.get('/todos', async (req,res,) => {
 
     

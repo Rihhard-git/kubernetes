@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-frontend-dep
+  namespace: project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-frontend
+  template:
+    metadata:
+      labels:
+        app: todo-frontend
+    spec:
+      containers:
+        - name: todo-frontend
+          image: raihhardv/todo-frontend@sha256:adaf1ce70abd35de745481f060f593aa950b55f9d74787bcb2754cd920d715f4
+          ports:
+            - containerPort: 80
+          env:
+            - name: BACKEND_URI
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: BACKEND_URI
+            - name: IMAGE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: IMAGE_URI   
+          volumeMounts:
+          - name: shared-file
+            mountPath: /usr/src/app/files
+      volumes:
+        - name: shared-file
+          persistentVolumeClaim:
+            claimName: todoapp-claim
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend-svc
+  namespace: project
+spec:
+  type: NodePort
+  selector: 
+    app: todo-frontend
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
