@@ -16,6 +16,7 @@ env:
   FE_IMAGE: todo-frontend
   BE_IMAGE: todo-backend
   BRANCH: ${{ github.ref_name }}
+  AGE_KEY: ${{ secrets.AGE_KEY }}
 
 jobs:
   build-publish-deploy:
@@ -67,6 +68,18 @@ jobs:
     
       - name: 'Set up Kustomize'
         uses: imranismail/setup-kustomize@v3
+
+      - name: 'Decrypt env variables'
+        working-directory: ./the_project/manifests
+        run: |-
+          curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
+          mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
+          chmod +x /usr/local/bin/sops
+          copy "$AGE_KEY" > key.txt
+          export SOPS_AGE_KEY_FILE=${pwd}/key.txt
+          sops --decrypt secret.enc.yaml | kubectl apply -f -
+          
+          
 
       - name: Deploy
         working-directory: ./the_project
