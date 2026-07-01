@@ -48,7 +48,7 @@ jobs:
           location: '${{ env.GKE_ZONE }}'
       
       - name: 'Form the FE image name'
-        run: echo "FE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "FE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$FRONTEND-IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: 'Build Frontend'
         run: docker build --tag $FE_IMAGE_TAG ./the_project/todo-frontend
@@ -57,7 +57,7 @@ jobs:
         run: docker push $FE_IMAGE_TAG
       
       - name: 'Form the BE image name'
-        run: echo "BE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "BE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$BACKEND-IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: 'Build Backend'
         run: docker build --tag $FBE_IMAGE_TAG ./the_project/todo-backend
