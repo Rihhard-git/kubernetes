@@ -13,8 +13,8 @@ env:
   GKE_ZONE: europe-north1-b
   REGISTRY: europe-north1-docker.pkg.dev
   REPOSITORY: todoapp
-  IMAGE: dwk-environments
-  SERVICE: dwk-environments
+  FRONTEND-IMAGE: todo-frontend
+  BACKEND-IMAGE: todo-backend
   BRANCH: ${{ github.ref_name }}
 
 jobs:
@@ -47,14 +47,23 @@ jobs:
           project_id: '${{ env.PROJECT_ID }}'
           location: '${{ env.GKE_ZONE }}'
       
-      - name: 'Form the image name'
-        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+      - name: 'Form the FE image name'
+        run: echo "FE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
-      - name: 'Build'
-        run: docker build --tag $IMAGE_TAG
+      - name: 'Build Frontend'
+        run: docker build --tag $FE_IMAGE_TAG ./the_project/todo-frontend
 
-      - name: 'Publish'
-        run: docker push $IMAGE_TAG
+      - name: 'Publish Frontend'
+        run: docker push $FE_IMAGE_TAG
+      
+      - name: 'Form the BE image name'
+        run: echo "BE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+
+      - name: 'Build Backend'
+        run: docker build --tag $FBE_IMAGE_TAG ./the_project/todo-backend
+
+      - name: 'Publish Backend'
+        run: docker push $BE_IMAGE_TAG
     
       - name: 'Set up Kustomize'
         uses: imranismail/setup-kustomize@v3
