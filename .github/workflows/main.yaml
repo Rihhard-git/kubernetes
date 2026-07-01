@@ -13,8 +13,8 @@ env:
   GKE_ZONE: europe-north1-b
   REGISTRY: europe-north1-docker.pkg.dev
   REPOSITORY: todoapp
-  FRONTEND-IMAGE: todo-frontend
-  BACKEND-IMAGE: todo-backend
+  FE_IMAGE: todo-frontend
+  BE_IMAGE: todo-backend
   BRANCH: ${{ github.ref_name }}
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
           location: '${{ env.GKE_ZONE }}'
       
       - name: 'Form the FE image name'
-        run: echo "FE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$FRONTEND-IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "FE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$FE_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: 'Build Frontend'
         run: docker build --tag $FE_IMAGE_TAG ./the_project/todo-frontend
@@ -57,10 +57,10 @@ jobs:
         run: docker push $FE_IMAGE_TAG
       
       - name: 'Form the BE image name'
-        run: echo "BE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$BACKEND-IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
+        run: echo "BE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$BE_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
 
       - name: 'Build Backend'
-        run: docker build --tag $FBE_IMAGE_TAG ./the_project/todo-backend
+        run: docker build --tag $BE_IMAGE_TAG ./the_project/todo-backend
 
       - name: 'Publish Backend'
         run: docker push $BE_IMAGE_TAG
