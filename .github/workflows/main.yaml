@@ -75,7 +75,7 @@ jobs:
           curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
           mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
           chmod +x /usr/local/bin/sops
-          copy "$AGE_KEY" > key.txt
+          cp "$AGE_KEY" > key.txt
           export SOPS_AGE_KEY_FILE=${pwd}/key.txt
           sops --decrypt secret.enc.yaml | kubectl apply -f -
           
