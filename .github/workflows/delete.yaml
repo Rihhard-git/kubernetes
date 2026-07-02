@@ -12,15 +12,11 @@ env:
   GKE_CLUSTER: dwk-cluster
   GKE_ZONE: europe-north1-b
   REGISTRY: europe-north1-docker.pkg.dev
-  REPOSITORY: todoapp
-  FE_IMAGE: todo-frontend
-  BE_IMAGE: todo-backend
   BRANCH: ${{ github.ref_name }}
-  AGE_KEY: ${{ secrets.AGE_KEY }}
 
 jobs:
   build-publish-deploy:
-    name: Delete environment
+    name: Build, Publish and Deploy
     runs-on: ubuntu-latest
     environment: DWK
 
@@ -47,23 +43,14 @@ jobs:
           cluster_name: '${{ env.GKE_CLUSTER }}'
           project_id: '${{ env.PROJECT_ID }}'
           location: '${{ env.GKE_ZONE }}'
-    
-      - name: 'Set up Kustomize'
-        uses: imranismail/setup-kustomize@v3
-                   
+      
       - name: Delete
-        working-directory: ./the_project
         run: |-
-          if [ "$BRANCH" = "main" ]; then
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          if [ "$BRANCH_NAME" = "main" ]; then
             NAMESPACE=project
           else
-            NAMESPEACE=$BRANCH
+            NAMESPACE=$BRANCH_NAME
+            kubectl delete all --all -n $NAMESPACE
+            kubectl delete ns $NAMESPACE
           fi
-          kubectl create namespace "$NAMESPACE" || true
-          kubectl config set-context --current --namespace="$NAMESPACE"
-          kustomize edit set namespace "$NAMESPACE"
-          
-          kustomize edit set image todo-frontend=$FE_IMAGE_TAG
-          kustomize edit set image todo-backend=$BE_IMAGE_TAG
-          kustomize build . | kubectl delete -f -
-          kubectl get all -n $NAMESPACE
