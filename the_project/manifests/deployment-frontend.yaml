@@ -29,13 +29,6 @@ spec:
                 secretKeyRef:
                   name: todoapp
                   key: IMAGE_URI   
-          volumeMounts:
-          - name: shared-file
-            mountPath: /usr/src/app/files
-      volumes:
-        - name: shared-file
-          persistentVolumeClaim:
-            claimName: todoapp-claim
 
 ---
 
