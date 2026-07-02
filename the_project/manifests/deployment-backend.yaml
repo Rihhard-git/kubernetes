@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: raihhardv/todo-backend@sha256:bd2c6360393e443774a67fb8707fe701fcf163baae7fb1036ac485910f2b43f4
+          image: raihhardv/todo-backend@sha256:785d4930025e4f05e3d7c3979618647823b79bdcac06c9d9619f808151451399
           env:
             - name: DATABASE_URL
               valueFrom:

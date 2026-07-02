@@ -41,7 +41,7 @@ metadata:
   namespace: project
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 100Mi

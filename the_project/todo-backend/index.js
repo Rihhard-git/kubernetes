@@ -14,6 +14,18 @@ const sequelize = new Sequelize(DATABASE_URL, {
         }
     }
 })
+
+const connectToDatabase = async () => {
+  try {
+    await sequelize.authenticate()
+    console.log('connected to the database')
+  } catch (err) {
+    console.log('failed to connect to the database')
+    return process.exit(1)
+  }
+
+  return null
+}
 class Todo extends Model {}
 Todo.init({
     id: {
@@ -86,6 +98,12 @@ app.post('/todos', async (req, res, next) => {
 
 app.use(errorHandler)
 
-app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`)
-})
+const start = async () => {
+    await connectToDatabase()
+    app.listen(PORT, () => {
+        console.log(`Server running on ${PORT}`)
+    })
+}
+
+start()
+
