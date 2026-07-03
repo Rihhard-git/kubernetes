@@ -70,7 +70,7 @@ jobs:
         uses: imranismail/setup-kustomize@v3
        
       - name: Deploy
-        working-directory: ./the_project/manifests
+        working-directory: ./the_project
         run: |-
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           if [ "$BRANCH_NAME" = "main" ]; then
@@ -85,11 +85,15 @@ jobs:
           kustomize edit set image todo-frontend=$FE_IMAGE_TAG
           kustomize edit set image todo-backend=$BE_IMAGE_TAG
 
+          cd /manifests
+
           curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
           mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
           chmod +x /usr/local/bin/sops
           export SOPS_AGE_KEY=$AGE_KEY
           sops --decrypt secret.enc.yaml | kubectl apply -f -
+
+          cd ..
 
           kustomize build . | kubectl apply -f -
 
