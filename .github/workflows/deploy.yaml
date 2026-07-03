@@ -78,8 +78,6 @@ jobs:
           export SOPS_AGE_KEY=$AGE_KEY
           sops --decrypt secret.enc.yaml | kubectl apply -f -
           
-          
-
       - name: Deploy
         working-directory: ./the_project
         run: |-
