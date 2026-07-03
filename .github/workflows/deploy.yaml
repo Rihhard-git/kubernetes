@@ -20,7 +20,7 @@ env:
 
 jobs:
   build-publish-deploy:
-    name: Delete environment
+    name: Build, Publish, Deploy
     runs-on: ubuntu-latest
     environment: DWK
 
@@ -74,9 +74,9 @@ jobs:
         run: |-
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           if [ "$BRANCH_NAME" = "main" ]; then
-            NAMESPACE=project
+            NAMESPACE="project"
           else
-            NAMESPEACE=$BRANCH_NAME
+            NAMESPEACE="$BRANCH_NAME"
           fi
 
           kubectl create namespace "$NAMESPACE" || true
