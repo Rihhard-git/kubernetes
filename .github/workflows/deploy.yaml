@@ -85,7 +85,7 @@ jobs:
           kustomize edit set image todo-frontend=$FE_IMAGE_TAG
           kustomize edit set image todo-backend=$BE_IMAGE_TAG
 
-          cd /manifests
+          cd manifests
 
           curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
           mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
