@@ -51,6 +51,6 @@ jobs:
             NAMESPACE=project
           else
             NAMESPACE=$BRANCH_NAME
+          fi
             kubectl delete all --all -n $NAMESPACE
             kubectl delete ns $NAMESPACE
-          fi

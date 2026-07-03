@@ -83,10 +83,10 @@ jobs:
       - name: Deploy
         working-directory: ./the_project
         run: |-
-          if [ "$BRANCH" = "main" ]; then
+          if [ "$BRANCH_NAME" = "main" ]; then
             NAMESPACE=project
           else
-            NAMESPEACE=$BRANCH
+            NAMESPEACE=$BRANCH_NAME
           fi
           kubectl create namespace "$NAMESPACE" || true
           kubectl config set-context --current --namespace="$NAMESPACE"
