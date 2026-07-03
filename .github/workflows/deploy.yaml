@@ -79,21 +79,20 @@ jobs:
             NAMESPEACE=$BRANCH_NAME
           fi
 
+          kubectl create namespace "$NAMESPACE" || true
+          kubectl config set-context --current --namespace="$NAMESPACE"
+          kustomize edit set namespace "$NAMESPACE"      
+          kustomize edit set image todo-frontend=$FE_IMAGE_TAG
+          kustomize edit set image todo-backend=$BE_IMAGE_TAG
+
           curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
           mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
           chmod +x /usr/local/bin/sops
           export SOPS_AGE_KEY=$AGE_KEY
           sops --decrypt secret.enc.yaml | kubectl apply -f -
 
-          kubectl create namespace "$NAMESPACE" || true
-          kubectl config set-context --current --namespace="$NAMESPACE"
-          kustomize edit set namespace "$NAMESPACE"
-          
-          kustomize edit set image todo-frontend=$FE_IMAGE_TAG
-          kustomize edit set image todo-backend=$BE_IMAGE_TAG
-
           kustomize build . | kubectl apply -f -
-            
+
           kubectl rollout status deployment/todo-frontend-dep -n project
           kubectl rollout status deployment/todo-backend-dep -n project
           kubectl get services -n project -o wide
