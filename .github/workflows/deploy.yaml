@@ -68,18 +68,9 @@ jobs:
     
       - name: 'Set up Kustomize'
         uses: imranismail/setup-kustomize@v3
-
-      - name: 'Decrypt env variables'
-        working-directory: ./the_project/manifests
-        run: |-
-          curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
-          mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
-          chmod +x /usr/local/bin/sops
-          export SOPS_AGE_KEY=$AGE_KEY
-          sops --decrypt secret.enc.yaml | kubectl apply -f -
-          
+       
       - name: Deploy
-        working-directory: ./the_project
+        working-directory: ./the_project/manifests
         run: |-
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           if [ "$BRANCH_NAME" = "main" ]; then
@@ -87,13 +78,22 @@ jobs:
           else
             NAMESPEACE=$BRANCH_NAME
           fi
+
+          curl -LO https://github.com/getsops/sops/releases/download/v3.13.2/sops-v3.13.2.linux.amd64
+          mv sops-v3.13.2.linux.amd64 /usr/local/bin/sops
+          chmod +x /usr/local/bin/sops
+          export SOPS_AGE_KEY=$AGE_KEY
+          sops --decrypt secret.enc.yaml | kubectl apply -f -
+
           kubectl create namespace "$NAMESPACE" || true
           kubectl config set-context --current --namespace="$NAMESPACE"
           kustomize edit set namespace "$NAMESPACE"
           
           kustomize edit set image todo-frontend=$FE_IMAGE_TAG
           kustomize edit set image todo-backend=$BE_IMAGE_TAG
+
           kustomize build . | kubectl apply -f -
+            
           kubectl rollout status deployment/todo-frontend-dep -n project
           kubectl rollout status deployment/todo-backend-dep -n project
           kubectl get services -n project -o wide
