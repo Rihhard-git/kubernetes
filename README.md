@@ -41,3 +41,20 @@
 - [3.7](https://github.com/Rihhard-git/kubernetes/tree/3.7/)
 - [3.8](https://github.com/Rihhard-git/kubernetes/tree/3.8/)
 
+### Exercise 3.9 DBaaS vs DIY
+
+## DBaaS
+#  Pros:
+    - easy to maintain, monitor and scale. Includes easy to use backups for different needs
+#  Cons:
+    - not fully controlled by you
+    - costs more
+
+## DIY
+# Pros:
+    - intializing is easier with PVC and Postgres in pod.
+    - you have full control of the system
+    - cheaper
+# Cons:
+    - Maintain, monitoring and scalining requires more effort and skill.
+
