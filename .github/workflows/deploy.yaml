@@ -76,7 +76,7 @@ jobs:
           if [ "$BRANCH_NAME" = "main" ]; then
             NAMESPACE="project"
           else
-            NAMESPEACE="$BRANCH_NAME"
+            NAMESPACE="$BRANCH_NAME"
           fi
 
           kubectl create namespace "$NAMESPACE" || true
