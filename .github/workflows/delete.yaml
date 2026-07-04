@@ -53,5 +53,6 @@ jobs:
           else
             NAMESPACE=$BRANCH_NAME
           fi
-            kubectl delete all --all -n $NAMESPACE
+            echo "This data is from branchdata: $BRANCH"
+            echo "Deleting namespace $NAMESPACE created for branch $BRANCH_NAME"
             kubectl delete ns $NAMESPACE
