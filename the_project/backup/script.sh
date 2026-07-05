@@ -3,6 +3,8 @@ set -e
 
 if [ $URL ]
 then
+  echo $URL
+
   pg_dump -v $URL > /usr/src/app/backup.sql
 
   echo "Not sending the dump actually anywhere"
