@@ -15,6 +15,7 @@ env:
   REPOSITORY: todoapp
   FE_IMAGE: todo-frontend
   BE_IMAGE: todo-backend
+  BACKUP_IMAGE: backup
   BRANCH: ${{ github.ref_name }}
   AGE_KEY: ${{ secrets.AGE_KEY }}
 
@@ -50,19 +51,22 @@ jobs:
       
       - name: 'Form the FE image name'
         run: echo "FE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$FE_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
-
       - name: 'Build Frontend'
         run: docker build --tag $FE_IMAGE_TAG ./the_project/todo-frontend
-
       - name: 'Publish Frontend'
         run: docker push $FE_IMAGE_TAG
+
+      - name: 'Form the Backup image name'
+        run: echo "BACKUP_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$BACKUP_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV 
+      - name: 'Build Backup'
+        run: docker build --tag $BACKUP_TAG ./the_project/backup
+      - name: 'Publish Backup'
+        run: docker push $BACKUP_TAG
       
       - name: 'Form the BE image name'
         run: echo "BE_IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$BE_IMAGE:$BRANCH-$GITHUB_SHA" >> $GITHUB_ENV
-
       - name: 'Build Backend'
         run: docker build --tag $BE_IMAGE_TAG ./the_project/todo-backend
-
       - name: 'Publish Backend'
         run: docker push $BE_IMAGE_TAG
     
@@ -84,6 +88,7 @@ jobs:
           kustomize edit set namespace "$NAMESPACE"      
           kustomize edit set image todo-frontend=$FE_IMAGE_TAG
           kustomize edit set image todo-backend=$BE_IMAGE_TAG
+          kustomize edit set image backup=$BACKUP_TAG
 
           cd manifests
 
