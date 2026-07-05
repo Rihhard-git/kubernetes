@@ -8,6 +8,9 @@ spec:
     spec:
       template:
         spec:
+          nodeSelector:
+            iam.gke.io/gke-metadata-server-enabled: "true"
+          serviceAccountName: backup-ksa
           containers:
           - name: backup
             image: raihhardv/backup
