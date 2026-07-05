@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-frontend
-          image: raihhardv/todo-frontend@sha256:adaf1ce70abd35de745481f060f593aa950b55f9d74787bcb2754cd920d715f4
+          image: raihhardv/todo-frontend
           ports:
             - containerPort: 80
           env:

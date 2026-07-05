@@ -86,9 +86,9 @@ jobs:
           kubectl create namespace "$NAMESPACE" || true
           kubectl config set-context --current --namespace="$NAMESPACE"
           kustomize edit set namespace "$NAMESPACE"      
-          kustomize edit set image todo-frontend=$FE_IMAGE_TAG
-          kustomize edit set image todo-backend=$BE_IMAGE_TAG
-          kustomize edit set image backup=$BACKUP_TAG
+          kustomize edit set image raihhardv/todo-frontend=$FE_IMAGE_TAG
+          kustomize edit set image raihhardv/todo-backend=$BE_IMAGE_TAG
+          kustomize edit set image raihhardv/backup=$BACKUP_TAG
 
           cd manifests
 
