@@ -5,6 +5,6 @@ COPY script.sh .
 
 RUN chmod +x /usr/src/app/script.sh
 
-RUN apk add postgresql-client
+RUN apt-get postgresql-client
 
 CMD ["./script.sh"]
