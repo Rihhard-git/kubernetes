@@ -5,6 +5,6 @@ COPY script.sh .
 
 RUN chmod +x /usr/src/app/script.sh
 
-RUN apt update && apt install -y postgresql-client-18
+RUN apt install -y postgresql-client
 
 CMD ["./script.sh"]
