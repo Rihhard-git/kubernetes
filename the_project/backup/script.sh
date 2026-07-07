@@ -6,7 +6,11 @@ then
 
   name=backup-$(date -I).sql
 
+  echo $name
+  echo 'creating dump'
   pg_dump -v $URL > /usr/src/app/$name
+
+  echo 'dump created --- posting to GCS'
   curl -X POST --data-binary @/usr/src/app/$name \
     -H "Authorization: Bearer $(gcloud auth print-access-token)" \
     "Content-Type: application/sql" \
