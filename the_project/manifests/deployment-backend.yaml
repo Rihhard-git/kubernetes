@@ -16,11 +16,12 @@ spec:
         - name: todo-backend
           image: raihhardv/todo-backend
           resources:
-            memory: "64Mi"
-            cpu: "500m"
-          limits:
-            memory: "128Mi"
-            cpu: "750m"
+            requests:
+              memory: "64Mi"
+              cpu: "500m"
+            limits:
+              memory: "128Mi"
+              cpu: "750m"
           env:
             - name: DATABASE_URL
               valueFrom:

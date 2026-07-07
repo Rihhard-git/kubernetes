@@ -16,11 +16,12 @@ spec:
         - name: todo-frontend
           image: raihhardv/todo-frontend
           resources:
-            memory: "32Mi"
-            cpu: "200m"
-          limits:
-            memory: "64Mi"
-            cpu: "250m"
+            requests:
+              memory: "32Mi"
+              cpu: "200m"
+            limits:
+              memory: "64Mi"
+              cpu: "250m"
           ports:
             - containerPort: 80
           env:
