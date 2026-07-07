@@ -1,4 +1,4 @@
-POST http://136.69.101.110/todos
+POST http://34.49.137.96/todos
 Content-Type: application/json
 
 {
