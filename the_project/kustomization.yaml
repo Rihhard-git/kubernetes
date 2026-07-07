@@ -5,4 +5,4 @@ resources:
   - ./manifests/deployment-backend.yaml
   - ./manifests/deployment-frontend.yaml
   - ./manifests/ingress.yaml
-  - ./manifests/backup-cronjob.yaml
+#  - ./manifests/backup-cronjob.yaml
