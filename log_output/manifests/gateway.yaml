@@ -1,10 +1,19 @@
 apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+
+--- 
+
+apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: my-gateway
   namespace: exercises
 spec:
-  gatewayClassName: gke-l7-global-external-managed
+  gatewayClassName: eg
   listeners:
   - name: http
     protocol: HTTP

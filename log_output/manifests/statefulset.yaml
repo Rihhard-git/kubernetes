@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  namespace: exercises
+spec:
+  serviceName: database-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - name: database
+              containerPort: 5432
+          volumeMounts:
+            - name: database-volume
+              mountPath: /var/lib/postgresql
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "kubernetes"
+      volumes:
+        - name: database-volume
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+  
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: exercises
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-svc
+  namespace: exercises
+  labels:
+    app: database
+spec:
+  ports:
+    - port: 5432
+      name: database
+  selector:
+    app: database
+  clusterIP: None

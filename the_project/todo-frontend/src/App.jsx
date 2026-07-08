@@ -22,15 +22,15 @@ const App = () => {
   }
 
   return (
-    <body>
-      <main>
-        <h1>ToDo App</h1>
+    <div>
+      <h1>ToDo App</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                   title:
                 </label>  
                 <input 
-                  value={title} 
+                  type="text"
+                  id="title"
                 />  
                 <button type="submit">Send</button>
             </form>
@@ -43,8 +43,8 @@ const App = () => {
                )}
               </ul>
             } 
-      </main>
-    </body>
+    </div>
+        
   )
 }
 

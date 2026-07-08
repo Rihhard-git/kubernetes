@@ -4,6 +4,7 @@ metadata:
   name: logoutput-claim
   namespace: exercises
 spec:
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:

@@ -16,6 +16,16 @@ const informationPath = path.join(__dirname, 'config', 'information.txt')
 
 console.log('env variable MESSAGE: ', MESSAGE)
 
+app.get('/healthz', async (req,res) => {
+    try {
+        await axios.get('http://pingpong-svc:80/pings')
+        res.sendStatus(200)
+    } catch (error) {
+        console.log('Error occured: ', error.message)
+        res.sendStatus(500)
+    }
+})
+
 
 app.get('/', async (req, res) => {
 

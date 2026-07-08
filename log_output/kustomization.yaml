@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./manifests/statefulset.yaml
+  - ./manifests/deployment-pingpong.yaml
+  - ./manifests/gateway.yaml
+  - ./manifests/deployment-logoutput.yaml
+  - ./manifests/persistentvolumeclaim.yaml
+  - ./manifests/configmap.yaml
