@@ -1,70 +1,43 @@
 import express from 'express'
-import { Sequelize, Model, DataTypes } from 'sequelize'
+import { Pool } from 'pg'
 import morgan from 'morgan'
 
 const app = express()
 const PORT = process.env.PORT
-
 const DATABASE_URL = process.env.DATABASE_URL
-const sequelize = new Sequelize(DATABASE_URL, {
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false
-        }
-    }
+
+
+const pool = new Pool({
+    connectionString:
+        process.env.DATABASE_URL
 })
 
-const connectToDatabase = async () => {
-  try {
-    await sequelize.authenticate()
-    console.log('connected to the database')
-  } catch (err) {
-    console.log('failed to connect to the database')
-    return process.exit(1)
-  }
+let ready = false
+let isHealthy = true
 
-  return null
-}
-class Todo extends Model {}
-Todo.init({
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    title: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        validate: {
-            len: [0, 140]
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const init = async () => {
+
+    while (!ready) {
+        try {
+            await pool.query(`
+                CREATE TABLE IF NOT EXISTS todos (
+                id SERIAL PRIMARY KEY,
+                title TEXT NOT NULL
+                )
+            `)
+            await pool.query(`
+                INSERT INTO todos (id, title)
+                VALUES (1, 'Learn DevOps')
+                ON CONFLICT (id) DO NOTHING`)
+            ready = true
+            console.log('DB initialized')
+        } catch (err) {
+            console.log('DB not ready, retrying...', err.message)
+            await sleep(2000)
         }
-
-    }
-}, {
-    sequelize,
-    underscored: true,
-    timestamps: false,
-    modelName: 'todo'
-})
-await Todo.sync()
-
-const errorHandler = (error, req, res, next) => {
-
-    console.log(error)
-    if (error.name === 'SequelizeUniqueConstraintError') {
-        return res.status(400).send({ error: error.message })
-    }
-    if (error.name === 'SequelizeDatabaseError') {
-        return res.status(400).send({ error: error.message })
-    }
-    if (error.name === 'TypeError') {
-        return res.status(400).send({ error: error.message})
-    }
-    if (error.name === 'SequelizeValidationError') {
-        return res.status(400).send({ error: error.message})
-    }
-    next(error)
+    }    
 }
 
 app.use(express.json())
@@ -75,35 +48,63 @@ morgan.token('data', (req, res) => {
 
 app.use(morgan('[:date[iso]] -- :method :url -- DATA: :data -- STATUS: :status' ))
 
-app.get('/', (req,res) => res.status(200).send('Health check ok!'))
+app.get('/healthz', async (req, res) => {
+
+    if (!isHealthy) {
+        return res.status(500).json({ status: "unhealthy"})
+    }
+
+    try {
+        await pool.query('SELECT 1')
+        res.status(200).json({ status: 'healthy'})
+    } catch {
+        ready = false
+        res.status(500).send('db error')
+        init()
+    }
+})
+app.get('/livez', (req,res) => {
+    if (!isHealthy) {
+        res.status(500).send('Backend is dead')
+    }
+
+    res.status(200).send('Backend is live')
+
+})
 app.get('/todos', async (req,res,) => {
 
-    
-    const todos = await Todo.findAll()
-    res.json(todos) 
-
-    
+    const result = await pool.query(`
+        SELECT id, title
+        FROM todos
+        `)
+    res.json(result.rows) 
 })
 
 app.post('/todos', async (req, res, next) => {
 
     try {
-        const todo = await Todo.create(req.body)
-        res.status(201).json(todo)
+        const result = await pool.query(`
+            INSERT INTO todos (title)
+            VALUES ($1)
+            RETURNING *`,
+            [req.body.title]
+        )
+        res.status(201).json(result.rows[0])
     } catch (error) {
         next(error)
     }
     
 })
 
-app.use(errorHandler)
+app.post('/break', (req, res) => {
+    console.log('Backend intentionally broken')
+    isHealthy = false
+    res.status(200).json({ message: 'Backend broken'})
+})
 
-const start = async () => {
-    await connectToDatabase()
-    app.listen(PORT, () => {
-        console.log(`Server running on ${PORT}`)
-    })
-}
+init()
 
-start()
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`)
+})
 

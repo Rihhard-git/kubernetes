@@ -14,7 +14,19 @@ spec:
     spec:
       containers:
         - name: todo-frontend
-          image: raihhardv/todo-frontend
+          image: raihhardv/todo-frontend@sha256:b70c0bfbeb09aa98091b2b6a6be4c88fe8dca56a7e0e78f165f91beb3dc2a7a5
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /
+              port: 80
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /
+              port: 80
           resources:
             requests:
               memory: "32Mi"
@@ -43,7 +55,7 @@ kind: Service
 metadata:
   name: todo-frontend-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector: 
     app: todo-frontend
   ports:

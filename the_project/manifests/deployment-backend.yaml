@@ -14,7 +14,19 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: raihhardv/todo-backend
+          image: raihhardv/todo-backend@sha256:984d28ea76053bc5b5518e4bbf3c2ee6fbcf6b82b7ef1810021e3bd2ebb3c5d8
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3000
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /livez
+              port: 3000
           resources:
             requests:
               memory: "64Mi"
@@ -40,7 +52,7 @@ kind: Service
 metadata:
   name: todo-backend-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector: 
     app: todo-backend
   ports:

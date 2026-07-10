@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const getAll = () => {
+const getAll = async () => {
     console.log('getting todos from backend')
 
-    const req = axios.get('/todos')
-    return req.then(res => res.data)
+    const res = await axios.get('/todos')
+    return res.data
 }
 const create = (todoObject) => {
     console.log('creating new todo')
@@ -13,4 +13,9 @@ const create = (todoObject) => {
     return res.data
 }
 
-export default { getAll, create }
+const checkHealth = async () => {
+    const res = await axios.get('/healthz')
+    return res.data
+}
+
+export default { getAll, create, checkHealth }

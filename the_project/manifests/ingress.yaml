@@ -13,6 +13,20 @@ spec:
             name: todo-frontend-svc
             port:
               number: 80
+      - path: /healthz
+        pathType: Prefix
+        backend:
+          service:
+            name: todo-backend-svc
+            port:
+              number: 80
+      - path: /break
+        pathType: Prefix
+        backend:
+          service:
+            name: todo-backend-svc
+            port:
+              number: 80
       - path: /todos
         pathType: Prefix
         backend:
