@@ -1,17 +1,20 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./manifests/statefulset.yaml
-  - ./manifests/deployment-pingpong.yaml
-  - ./manifests/gateway.yaml
-  - ./manifests/deployment-logoutput.yaml
-  - ./manifests/persistentvolumeclaim.yaml
-  - ./manifests/configmap.yaml
-  - ./manifests/analysistemplate.yaml
+- ./manifests/statefulset.yaml
+- ./manifests/deployment-pingpong.yaml
+- ./manifests/gateway.yaml
+- ./manifests/deployment-logoutput.yaml
+- ./manifests/persistentvolumeclaim.yaml
+- ./manifests/configmap.yaml
+- ./manifests/analysistemplate.yaml
 images:
-  - name: PROJECT/PINGPONG
-    newName: raihhardv/pingpong
-  - name: PROJECT/FILE_WRITER
-    newName: raihhardv/file-writer
-  - name: PROJECT/FILE_READER
-    newName: raihhardv/file-reader
+- name: PROJECT/FILE_READER
+  newName: raihhardv/file-reader
+  newTag: b0b3a9df9765fe2dc105126503fa24ea4af89c37
+- name: PROJECT/FILE_WRITER
+  newName: raihhardv/file-writer
+  newTag: b0b3a9df9765fe2dc105126503fa24ea4af89c37
+- name: PROJECT/PINGPONG
+  newName: raihhardv/pingpong
+  newTag: b0b3a9df9765fe2dc105126503fa24ea4af89c37
