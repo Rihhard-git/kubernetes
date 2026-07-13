@@ -24,13 +24,13 @@ const init = async () => {
             await pool.query(`
                 CREATE TABLE IF NOT EXISTS todos (
                 id SERIAL PRIMARY KEY,
-                title TEXT NOT NULL
+                text TEXT NOT NULL,
+                done BOOLEAN DEFAULT false
                 )
             `)
             await pool.query(`
-                INSERT INTO todos (id, title)
-                VALUES (1, 'Learn DevOps')
-                ON CONFLICT (id) DO NOTHING`)
+                INSERT INTO todos (text)
+                VALUES ('Learn DevOps With Kubernetes')`)
             ready = true
             console.log('DB initialized')
         } catch (err) {
@@ -74,7 +74,7 @@ app.get('/livez', (req,res) => {
 app.get('/todos', async (req,res,) => {
 
     const result = await pool.query(`
-        SELECT id, title
+        SELECT id, text, done
         FROM todos
         `)
     res.json(result.rows) 
@@ -84,16 +84,32 @@ app.post('/todos', async (req, res, next) => {
 
     try {
         const result = await pool.query(`
-            INSERT INTO todos (title)
+            INSERT INTO todos (text)
             VALUES ($1)
             RETURNING *`,
-            [req.body.title]
+            [req.body.text]
         )
         res.status(201).json(result.rows[0])
     } catch (error) {
         next(error)
     }
     
+})
+app.put('/todos/:id', async (req, res) => {
+    const { id } = req.params
+    const { done } = req.body
+
+    try {
+        const result = await pool.query(`
+        UPDATE todos
+        SET done = $1
+        WHERE id = $2
+        RETURNING *`,
+        [done, id])
+        res.json(result.rows[0])
+    } catch (error) {
+        console.log('Something went wrong marking todo done: ', error.message)
+    }   
 })
 
 app.post('/break', (req, res) => {

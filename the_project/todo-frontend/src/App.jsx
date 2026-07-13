@@ -5,7 +5,7 @@ import axios from 'axios'
 const App = () => {
 
   const [todos, setTodos] = useState([])
-  const [title, setTitle] = useState('new todo')
+  const [text, setText] = useState('New ToDo')
   const [appHealthy, setAppHealthy] = useState(null)
 
   useEffect(() => {
@@ -36,15 +36,15 @@ const App = () => {
       })
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     const todoObject = {
-      title: title
+      text: text
     }
-
-    const savedTodo = todoService.create(todoObject)
+    const savedTodo = await todoService.create(todoObject)
     setTodos(todos.concat(savedTodo))
+    setText('New ToDo')
   }
 
   const breakApp = async () => {
@@ -66,18 +66,30 @@ const App = () => {
       <p color="red">The Todo App is currently unhealthy. Please wait for recovery</p>
     </div>
   }
+  const markAsDone = (id) => {
+    const todoToMark = todos.find(t => t.id === id)
+    const markedTodo = {...todoToMark, done: !todoToMark.done}
 
+    todoService
+      .markDone(id, markedTodo)
+      .then(res => {
+        setTodos(todos.map(t => t.id !== id ? t : res.data))
+      })
+      .catch((err) => {      
+        console.log('Something went wrong: ', err.message) 
+      })    
+  }
   return (
     <div>
       <h1>ToDo App</h1>
             <form onSubmit={handleSubmit}>
                 <label>
-                  title:
+                  Text:
                 </label>  
                 <input 
                   type="text"
-                  id="title"
-                  onChange={({ target }) => setTitle(target.value)}
+                  id="text"
+                  onChange={({ target }) => setText(target.value)}
                 />  
                 <button type="submit">Send</button>
             </form>
@@ -86,7 +98,16 @@ const App = () => {
             :
               <ul>
                {todos.map(t => 
-                <li id={t.id}>{t.title}</li>
+                <li id={t.id}>
+                {t.done === false ?            
+                    <p>
+                      {t.text}
+                      <button onClick={() => markAsDone(t.id)}>MARK DONE</button>
+                    </p> 
+                :               
+                    <p><del>{t.text}</del> - <b>DONE</b></p>     
+                }
+                </li>
                )}
               </ul>
             }

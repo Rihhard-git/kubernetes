@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-frontend
-          image: raihhardv/todo-frontend@sha256:b70c0bfbeb09aa98091b2b6a6be4c88fe8dca56a7e0e78f165f91beb3dc2a7a5
+          image: raihhardv/todo-frontend@sha256:a4acbcbaebd91100f09c99f17133751f75d5c234373639ce5f992fb52ea204ac
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

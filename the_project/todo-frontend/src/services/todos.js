@@ -6,10 +6,10 @@ const getAll = async () => {
     const res = await axios.get('/todos')
     return res.data
 }
-const create = (todoObject) => {
-    console.log('creating new todo')
+const create = async (todoObject) => {
 
-    const res = axios.post('/todos', todoObject)
+    const res = await axios.post('/todos', todoObject)
+
     return res.data
 }
 
@@ -18,4 +18,9 @@ const checkHealth = async () => {
     return res.data
 }
 
-export default { getAll, create, checkHealth }
+const markDone = async (id, newObject) => {
+    return await axios.put(`/todos/${id}`, newObject)
+
+}
+
+export default { getAll, create, checkHealth, markDone }
