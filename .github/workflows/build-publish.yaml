@@ -2,6 +2,8 @@ name: Build and publish application
 
 on:
   push:
+    paths:
+      - './log_output'
 
 jobs:
   build-publish:
