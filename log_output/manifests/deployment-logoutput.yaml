@@ -30,7 +30,7 @@ spec:
           - name: shared-file
             mountPath: /usr/src/app/files
         - name: file-reader
-          image: raihhardv/file-reader@sha256:4baf3ee44f485036b0584253117f3c643800a10ab59883fe17ce87ab650c8c08
+          image: raihhardv/file-reader
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

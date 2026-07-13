@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: raihhardv/pingpong@sha256:f2c2d2be9c40aa0a9f938207d85fbbd45d45975ea0f43ecf5c4396f49ab64ab2
+          image: raihhardv/pingpong
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5
