@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: pingpong
-          image: raihhardv/pingpong
+          image: PROJECT/PINGPONG
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

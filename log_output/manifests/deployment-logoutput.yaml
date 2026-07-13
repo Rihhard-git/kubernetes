@@ -25,12 +25,12 @@ spec:
               path: "information.txt"
       containers:
         - name: file-writer
-          image: raihhardv/file-writer
+          image: PROJECT/FILE_WRITER
           volumeMounts:
           - name: shared-file
             mountPath: /usr/src/app/files
         - name: file-reader
-          image: raihhardv/file-reader
+          image: PROJECT/FILE_READER
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

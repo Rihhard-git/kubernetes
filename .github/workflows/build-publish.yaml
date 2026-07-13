@@ -38,10 +38,11 @@ jobs:
         uses: imranismail/setup-kustomize@v3
 
       - name: Use right images
+        working-directory: ./log_output
         run: |-
-            kustomize edit set image raihhardv/pingpong=raihhardv/pingpong:$GITHUB_SHA
-            kustomize edit set image raihhardv/file-writer=raihhardv/file-writer:$GITHUB_SHA
-            kustomize edit set image raihahrdv/file-reader=raihhardv/file-reader:$GITHUB_SHA
+            kustomize edit set image PROJECT/PINGPONG=raihhardv/pingpong:$GITHUB_SHA
+            kustomize edit set image PROJECT/FILE_WRITER=raihhardv/file-writer:$GITHUB_SHA
+            kustomize edit set image PROJECT/FILE_READER=raihhardv/file-reader:$GITHUB_SHA
 
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v10
