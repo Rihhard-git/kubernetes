@@ -21,17 +21,17 @@ jobs:
       # tag image with the GitHub SHA to get a unique tag
       - name: Build and publish pingpong
         run: |-
-          docker build --tag "raihhardv/pingpong:$GITHUB_SHA" .
+          docker build --tag "raihhardv/pingpong:$GITHUB_SHA" ./log_output/pingpong
           docker push "raihhardv/pingpong:$GITHUB_SHA"
 
       - name: Build and publish file-reader
         run: |-
-          docker build --tag "raihhardv/file-reader:$GITHUB_SHA" .
+          docker build --tag "raihhardv/file-reader:$GITHUB_SHA" ./log_output/file-reader
           docker push "raihhardv/file-reader:$GITHUB_SHA" 
 
       - name: Build and publish file-writer
         run: |-
-          docker build --tag "raihhardv/file-writer:$GITHUB_SHA" .
+          docker build --tag "raihhardv/file-writer:$GITHUB_SHA" ./log_output/file-writer
           docker push "raihhardv/file-writer:$GITHUB_SHA" 
 
       - name: Set up Kustomize
