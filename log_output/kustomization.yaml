@@ -8,3 +8,10 @@ resources:
   - ./manifests/persistentvolumeclaim.yaml
   - ./manifests/configmap.yaml
   - ./manifests/analysistemplate.yaml
+images:
+  - name: PROJECT/PINGPONG
+    newName: raihhardv/pingpong
+  - name: PROJECT/FILE_WRITER
+    newName: raihhardv/file-writer
+  - name: PROJECT/FILE_READER
+    newName: raihhardv/file-reader
