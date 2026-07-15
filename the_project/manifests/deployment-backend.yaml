@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: raihhardv/todo-backend@sha256:235648b388b385d3508a8261d303f80ccf4bb7d57b04342a426c92478d20fb29
+          image: PROJECT/BACKEND
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

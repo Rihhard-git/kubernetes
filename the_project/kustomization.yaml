@@ -6,3 +6,8 @@ resources:
   - ./manifests/deployment-frontend.yaml
   - ./manifests/ingress.yaml
 #  - ./manifests/backup-cronjob.yaml
+images:
+- name: PROJECT/FRONTEND
+  newName: raihhardv/todo-frontend
+- name: PROJECT/BACKEND
+  newName: raihhardv/todo-backend
