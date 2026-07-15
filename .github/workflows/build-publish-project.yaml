@@ -3,7 +3,7 @@ name: Build and publish Todo-App
 on:
   push:
     paths:
-      - './the_project'
+      - './the_project/**'
 
 jobs:
   build-publish:
