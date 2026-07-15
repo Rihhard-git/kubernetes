@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-frontend-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-frontend
+  template:
+    metadata:
+      labels:
+        app: todo-frontend
+    spec:
+      containers:
+        - name: todo-frontend
+          image: PROJECT/FRONTEND
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /
+              port: 80
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            httpGet:
+              path: /
+              port: 80
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "200m"
+            limits:
+              memory: "64Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: BACKEND_URI
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: BACKEND_URI
+            - name: IMAGE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: todoapp
+                  key: IMAGE_URI   
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend-svc
+spec:
+  type: ClusterIP
+  selector: 
+    app: todo-frontend
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80

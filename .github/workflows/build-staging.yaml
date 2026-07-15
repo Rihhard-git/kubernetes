@@ -4,9 +4,12 @@ on:
   push:
     paths:
       - 'the_project/**'
-      - '.github/workflows/build-publish-project.yaml'
+      - '.github/workflows/build-staging.yaml'
     branches:
       - main
+
+permissions:
+  contents: write
 
 jobs:
   build-publish:
@@ -37,8 +40,8 @@ jobs:
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
 
-      - name: Use right images
-        working-directory: ./the_project
+      - name: Set staging image
+        working-directory: ./the_project/overlays/staging
         run: |-
             kustomize edit set image PROJECT/FRONTEND=raihhardv/todo-frontend:$GITHUB_SHA
             kustomize edit set image PROJECT/BACKEND=raihhardv/todo-backend:$GITHUB_SHA
@@ -47,5 +50,5 @@ jobs:
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v10
         with:
-          add: 'the_project/kustomization.yaml'
+          add: 'the_project/overlays/kustomization.yaml'
           message: New version released ${{ github.sha }}
