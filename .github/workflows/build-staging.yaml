@@ -42,7 +42,7 @@ jobs:
         uses: imranismail/setup-kustomize@v3
 
       - name: Set staging image
-        working-directory: ./the_project/overlays/kustomization.yaml
+        working-directory: ./the_project/overlays/staging
         run: |-
             kustomize edit set image PROJECT/FRONTEND=raihhardv/todo-frontend:$GITHUB_SHA
             kustomize edit set image PROJECT/BACKEND=raihhardv/todo-backend:$GITHUB_SHA
