@@ -31,7 +31,10 @@ const init = async () => {
             `)
             await pool.query(`
                 INSERT INTO todos (text)
-                VALUES ('Learn DevOps With Kubernetes')`)
+                SELECT $1
+                WHERE NOT EXISTS (
+                SELECT 1 FROM todos WHERE text = $1)
+                `, ['Learn DevOps With Kubernetes'])
             ready = true
             console.log('DB initialized')
         } catch (err) {
@@ -66,7 +69,7 @@ app.get('/healthz', async (req, res) => {
 })
 app.get('/livez', (req,res) => {
     if (!isHealthy) {
-        res.status(500).send('Backend is dead')
+        return res.status(500).send('Backend is dead')
     }
 
     res.status(200).send('Backend is live')
