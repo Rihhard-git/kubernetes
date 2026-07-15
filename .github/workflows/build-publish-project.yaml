@@ -2,9 +2,6 @@ name: Build and publish Todo-App
 
 on:
   push:
-    paths:
-      - './the_project/**'
-      - '.github/workflow/build-publish.project.yaml'
 
 jobs:
   build-publish:
