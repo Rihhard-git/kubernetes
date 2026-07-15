@@ -5,6 +5,8 @@ on:
     paths:
       - 'the_project/**'
       - '.github/workflows/build-publish-project.yaml'
+    branches:
+      - main
 
 jobs:
   build-publish:
