@@ -1,9 +1,10 @@
-name: Build and publish application
+name: Build and publish Logoutput
 
 on:
   push:
     paths:
-      - './log_output'
+      - 'log_output/**'
+      - '.github/workflows/build-publish-logouput.yaml'
 
 jobs:
   build-publish:
