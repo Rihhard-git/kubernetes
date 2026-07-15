@@ -1,13 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./manifests/statefulset.yaml
-  - ./manifests/deployment-backend.yaml
-  - ./manifests/deployment-frontend.yaml
-  - ./manifests/ingress.yaml
+- ./manifests/statefulset.yaml
+- ./manifests/deployment-backend.yaml
+- ./manifests/deployment-frontend.yaml
+- ./manifests/ingress.yaml
 #  - ./manifests/backup-cronjob.yaml
 images:
-- name: PROJECT/FRONTEND
-  newName: raihhardv/todo-frontend
 - name: PROJECT/BACKEND
   newName: raihhardv/todo-backend
+  newTag: eb06daf252e1244a887ed8f38cd4d20b984c2b5c
+- name: PROJECT/FRONTEND
+  newName: raihhardv/todo-frontend
+  newTag: eb06daf252e1244a887ed8f38cd4d20b984c2b5c
