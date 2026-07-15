@@ -3,7 +3,8 @@ name: Build and publish Todo-App
 on:
   push:
     paths:
-      - 'the_project/**'
+      - 'the_project/todo-frontend/**'
+      - 'the_project/todo-backend/**'
       - '.github/workflows/build-staging.yaml'
     branches:
       - main
@@ -41,7 +42,7 @@ jobs:
         uses: imranismail/setup-kustomize@v3
 
       - name: Set staging image
-        working-directory: ./the_project/overlays/staging
+        working-directory: ./the_project/overlays/kustomization.yaml
         run: |-
             kustomize edit set image PROJECT/FRONTEND=raihhardv/todo-frontend:$GITHUB_SHA
             kustomize edit set image PROJECT/BACKEND=raihhardv/todo-backend:$GITHUB_SHA
@@ -50,5 +51,5 @@ jobs:
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v10
         with:
-          add: 'the_project/overlays/kustomization.yaml'
+          add: 'the_project/overlays/staging/kustomization.yaml'
           message: New version released ${{ github.sha }}
