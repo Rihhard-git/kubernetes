@@ -9,7 +9,7 @@ resources:
 images:
 - name: PROJECT/BACKEND
   newName: raihhardv/todo-backend
-  newTag: d64160d4c3b44a02fb7551228d3abf0d071a1ae5
+  newTag: fb5a81f10dc27f4545f15c631f838e00483dc6b6
 - name: PROJECT/FRONTEND
   newName: raihhardv/todo-frontend
-  newTag: d64160d4c3b44a02fb7551228d3abf0d071a1ae5
+  newTag: fb5a81f10dc27f4545f15c631f838e00483dc6b6
