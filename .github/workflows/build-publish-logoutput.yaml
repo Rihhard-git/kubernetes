@@ -5,6 +5,8 @@ on:
     paths:
       - 'log_output/**'
       - '.github/workflows/build-publish-logouput.yaml'
+    branches:
+    - main
 
 jobs:
   build-publish:
