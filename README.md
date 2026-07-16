@@ -55,6 +55,9 @@
 - [4.7](https://github.com/Rihhard-git/kubernetes/tree/4.7/log_output)
 - [4.8](https://github.com/Rihhard-git/kubernetes/tree/4.8/the_project)
 - [4.9](https://github.com/Rihhard-git/kubernetes/tree/4.9/the_project)
+- [4.10](https://github.com/Rihhard-git/kubernetes/tree/4.10/the_project)
+- [CONFIG REPO](https://github.com/Rihhard-git/todo-config)
+
 
 
 
