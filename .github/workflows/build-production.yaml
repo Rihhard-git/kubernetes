@@ -14,26 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v4
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # tag image with the GitHub SHA to get a unique tag
-      - name: Build and publish frontend
-        run: |-
-          docker build --tag "raihhardv/todo-frontend:$GITHUB_SHA" ./the_project/todo-frontend
-          docker push "raihhardv/todo-frontend:$GITHUB_SHA"
-
-      - name: Build and publish backend
-        run: |-
-          docker build --tag "raihhardv/todo-backend:$GITHUB_SHA" ./the_project/todo-backend
-          docker push "raihhardv/todo-backend:$GITHUB_SHA"  
-
       - name: Checkout todo-config repo
         uses: actions/checkout@v6
         with:
@@ -45,6 +25,30 @@ jobs:
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
 
+      - name: Verify both images were promoted through staging
+        working-directory: ./todo-config
+        env:
+          IMAGE_SHA: ${{ github.sha }}
+        run: |-
+          FRONTEND_TAG="$(awk '
+            /newName: raihhardv\/todo-frontend/ { found=1; next }
+            found && /newTag:/ { print $2; exit }
+          ' overlays/staging/kustomization.yaml)"
+
+          BACKEND_TAG="$(awk '
+            /newName: raihhardv\/todo-backend/ { found=1; next }
+            found && /newTag:/ { print $2; exit }
+          ' overlays/staging/kustomization.yaml)"
+
+          test "$FRONTEND_TAG" = "$IMAGE_SHA" || {
+            echo "Frontend image in staging is '$FRONTEND_TAG', expected '$IMAGE_SHA'"
+            exit 1
+          }
+
+          test "$BACKEND_TAG" = "$IMAGE_SHA" || {
+            echo "Backend image in staging is '$BACKEND_TAG', expected '$IMAGE_SHA'"
+            exit 1
+          }
       - name: Set production image
         working-directory: ./todo-config/overlays/production
         run: |-
@@ -58,4 +62,5 @@ jobs:
           cwd: todo-config
           add: 'overlays/production/kustomization.yaml'
           message: Deploy tag ${{ github.ref_name }} to production
+          push: true
           
