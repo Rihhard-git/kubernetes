@@ -6,6 +6,8 @@ const app = express()
 const PORT = process.env.PORT
 const DATABASE_URL = process.env.DATABASE_URL
 
+// Added comment for CICD testing
+
 const pool = new Pool({
     connectionString:
         process.env.DATABASE_URL
