@@ -4,6 +4,7 @@ on:
   push:
     tags:
     - "*"
+    branch: main
 
 permissions:
   contents: write
@@ -52,5 +53,6 @@ jobs:
       - name: Commit production configuration
         uses: EndBug/add-and-commit@v10
         with:
-          add: 'the_project/overlays/staging/kustomization.yaml'
+          add: 'the_project/overlays/production/kustomization.yaml'
           message: Deploy tag ${{ github.ref_name }} to production
+          
