@@ -4,6 +4,7 @@ resources:
 - ../../base
 
 namespace: project-staging
+
 images:
 - name: PROJECT/BACKEND
   newName: raihhardv/todo-backend

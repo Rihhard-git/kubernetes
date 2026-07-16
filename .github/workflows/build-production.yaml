@@ -1,13 +1,9 @@
-name: Build and publish Todo-App to staging
+name: Build and publish Todo-App to production
 
 on:
   push:
-    paths:
-      - 'the_project/todo-frontend/**'
-      - 'the_project/todo-backend/**'
-      - '.github/workflows/build-staging.yaml'
-    branches:
-      - main
+    tags:
+    - "*"
 
 permissions:
   contents: write
@@ -38,18 +34,23 @@ jobs:
           docker build --tag "raihhardv/todo-backend:$GITHUB_SHA" ./the_project/todo-backend
           docker push "raihhardv/todo-backend:$GITHUB_SHA"  
 
+      - name: Checkout main for production configuration update
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
 
-      - name: Set staging image
-        working-directory: ./the_project/overlays/staging
+      - name: Set production image
+        working-directory: ./the_project/overlays/production
         run: |-
             kustomize edit set image PROJECT/FRONTEND=raihhardv/todo-frontend:$GITHUB_SHA
             kustomize edit set image PROJECT/BACKEND=raihhardv/todo-backend:$GITHUB_SHA
 
 
-      - name: commit kustomization.yaml to GitHub
+      - name: Commit production configuration
         uses: EndBug/add-and-commit@v10
         with:
           add: 'the_project/overlays/staging/kustomization.yaml'
-          message: New version released ${{ github.sha }}
+          message: Deploy tag ${{ github.ref_name }} to production
