@@ -2,8 +2,6 @@ import express from 'express'
 import { Pool } from 'pg'
 import morgan from 'morgan'
 
-// Added comment for testing CICD
-
 const app = express()
 const PORT = process.env.PORT
 const DATABASE_URL = process.env.DATABASE_URL
