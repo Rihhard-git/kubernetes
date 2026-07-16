@@ -38,11 +38,19 @@ jobs:
           docker build --tag "raihhardv/todo-backend:$GITHUB_SHA" ./the_project/todo-backend
           docker push "raihhardv/todo-backend:$GITHUB_SHA"  
 
+      - name: Checkout todo-config repo
+        uses: actions/checkout@v6
+        with:
+          repository: Rihhard-git/todo-config
+          ref: main
+          path: todo-config
+          token: ${{ secrets.TODO_CONFIG_TOKEN }}
+
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
 
       - name: Set staging image
-        working-directory: ./the_project/overlays/staging
+        working-directory: ./todo-config/overlays/staging
         run: |-
             kustomize edit set image PROJECT/FRONTEND=raihhardv/todo-frontend:$GITHUB_SHA
             kustomize edit set image PROJECT/BACKEND=raihhardv/todo-backend:$GITHUB_SHA
@@ -51,5 +59,5 @@ jobs:
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v10
         with:
-          add: 'the_project/overlays/staging/kustomization.yaml'
+          add: 'overlays/staging/kustomization.yaml'
           message: New version released ${{ github.sha }}
