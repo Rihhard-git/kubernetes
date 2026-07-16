@@ -34,16 +34,19 @@ jobs:
           docker build --tag "raihhardv/todo-backend:$GITHUB_SHA" ./the_project/todo-backend
           docker push "raihhardv/todo-backend:$GITHUB_SHA"  
 
-      - name: Checkout main for production configuration update
+      - name: Checkout todo-config repo
         uses: actions/checkout@v6
         with:
+          repository: Rihhard-git/todo-config
           ref: main
+          path: todo-config
+          token: ${{ secrets.TODO_CONFIG_TOKEN }}
 
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v3
 
       - name: Set production image
-        working-directory: ./the_project/overlays/production
+        working-directory: ./todo-config/overlays/production
         run: |-
             kustomize edit set image PROJECT/FRONTEND=raihhardv/todo-frontend:$GITHUB_SHA
             kustomize edit set image PROJECT/BACKEND=raihhardv/todo-backend:$GITHUB_SHA
@@ -52,6 +55,7 @@ jobs:
       - name: Commit production configuration
         uses: EndBug/add-and-commit@v10
         with:
-          add: 'the_project/overlays/production/kustomization.yaml'
+          cwd: todo-config
+          add: 'overlays/production/kustomization.yaml'
           message: Deploy tag ${{ github.ref_name }} to production
           
