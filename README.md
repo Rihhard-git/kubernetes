@@ -58,6 +58,8 @@
 - [4.10](https://github.com/Rihhard-git/kubernetes/tree/4.10/the_project)
 - [CONFIG REPO](https://github.com/Rihhard-git/todo-config)
 
+### Chapter 6
 
+- [5.1](https://github.com/Rihhard-git/kubernetes/tree/5.1/dummysite)
 
 
