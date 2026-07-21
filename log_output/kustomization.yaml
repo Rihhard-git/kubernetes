@@ -12,10 +12,10 @@ resources:
 images:
 - name: PROJECT/FILE_READER
   newName: raihhardv/file-reader
-  newTag: 497b5172484b1884c79480912004c11a51b1a6cc
+  newTag: 3c73c2253cfcd27cc8044d3ed706be2a7a232220
 - name: PROJECT/FILE_WRITER
   newName: raihhardv/file-writer
-  newTag: 497b5172484b1884c79480912004c11a51b1a6cc
+  newTag: 3c73c2253cfcd27cc8044d3ed706be2a7a232220
 - name: PROJECT/PINGPONG
   newName: raihhardv/pingpong
-  newTag: 497b5172484b1884c79480912004c11a51b1a6cc
+  newTag: 3c73c2253cfcd27cc8044d3ed706be2a7a232220
