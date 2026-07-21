@@ -61,5 +61,7 @@
 ### Chapter 6
 
 - [5.1](https://github.com/Rihhard-git/kubernetes/tree/5.1/dummysite)
+- [5.2](https://github.com/Rihhard-git/kubernetes/tree/5.2/istio-1.30.3)
+
 
 
