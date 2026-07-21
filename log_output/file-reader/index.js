@@ -50,6 +50,8 @@ app.get('/', async (req, res) => {
     const response = await axios.get('http://pingpong-svc:80/pings')
 
     console.log('count found: ', response.data)
+
+    const greeterRes = await axios.get('http://greeter-gateway:80/')
     
     // const pingpongCount = await fs.readFile(countFilePath, 'utf8')
     //     .then((data) => {
@@ -64,6 +66,7 @@ app.get('/', async (req, res) => {
             <p>env variable: MESSAGE=${MESSAGE}</p>
             <p>${randomString}</p>
             <p>Ping / Pongs: ${response.data}</p>
+            <p>Greetings: ${greeterRes.data}</p>
         </div>
         `     
     )

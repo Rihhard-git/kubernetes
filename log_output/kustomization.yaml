@@ -8,6 +8,8 @@ resources:
 - ./manifests/persistentvolumeclaim.yaml
 - ./manifests/configmap.yaml
 - ./manifests/analysistemplate.yaml
+- ./manifests/greeter-gateway.yaml
+- ./manifests/deployment-greeter.yaml
 images:
 - name: PROJECT/FILE_READER
   newName: raihhardv/file-reader
