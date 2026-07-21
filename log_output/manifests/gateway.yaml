@@ -1,23 +1,58 @@
-apiVersion: gateway.networking.k8s.io/v1
-kind: GatewayClass
-metadata:
-  name: eg
-spec:
-  controllerName: gateway.envoyproxy.io/gatewayclass-controller
-
---- 
-
-apiVersion: gateway.networking.k8s.io/v1
+apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
-  name: my-gateway
+  name: greeter-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+
+---
+
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: app-routes
   namespace: exercises
 spec:
-  gatewayClassName: eg
-  listeners:
-  - name: http
-    protocol: HTTP
-    port: 80
-    allowedRoutes:
-      kinds:
-      - kind: HTTPRoute
+  hosts:
+  - "*"
+  gateways:
+  - greeter-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+      - destination:
+          host: logoutput-svc
+          port:
+            number: 80
+  - match:
+    - uri:
+        prefix: /pingpong
+    route:
+      - destination:
+          host: pingpong-svc
+          port:
+            number: 80
+  - match:
+    - uri:
+        exact: /greeter
+    route:
+    - destination:
+        host: greeter-svc-v1
+        port:
+          number: 80
+      weight: 50
+    - destination:
+        host: greeter-svc-v2
+        port:
+          number: 80
+      weight: 50

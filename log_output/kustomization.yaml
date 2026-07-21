@@ -3,12 +3,11 @@ kind: Kustomization
 resources:
 - ./manifests/statefulset.yaml
 - ./manifests/deployment-pingpong.yaml
-- ./manifests/gateway.yaml
 - ./manifests/deployment-logoutput.yaml
 - ./manifests/persistentvolumeclaim.yaml
 - ./manifests/configmap.yaml
 - ./manifests/analysistemplate.yaml
-- ./manifests/greeter-gateway.yaml
+- ./manifests/gateway.yaml
 - ./manifests/deployment-greeter.yaml
 images:
 - name: PROJECT/FILE_READER

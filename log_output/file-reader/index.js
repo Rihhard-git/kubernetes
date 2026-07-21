@@ -51,7 +51,7 @@ app.get('/', async (req, res) => {
 
     console.log('count found: ', response.data)
 
-    const greeterRes = await axios.get('http://greeter-gateway:80/')
+    const greeterRes = await axios.get('http://istio-ingressgateway.istio-ingress.svc.cluster.local/greeter')
     
     // const pingpongCount = await fs.readFile(countFilePath, 'utf8')
     //     .then((data) => {
