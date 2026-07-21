@@ -64,6 +64,7 @@
 - [5.2](https://github.com/Rihhard-git/kubernetes/tree/5.2/istio-1.30.3)
 - [5.3](https://github.com/Rihhard-git/kubernetes/tree/5.3/log_output)
 - [5.4](https://github.com/Rihhard-git/kubernetes/tree/5.4/wikipedia)
+- [5.6](https://github.com/Rihhard-git/kubernetes/tree/5.6/serverless)
 
 
 
